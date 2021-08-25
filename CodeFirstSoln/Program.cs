@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BEZAO_PayDAL.Entities;
+using BEZAO_PayDAL.Repositories;
+using BEZAO_PayDAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeFirstSoln
@@ -75,7 +77,16 @@ namespace CodeFirstSoln
             Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
         }
 
-        Console.WriteLine("-----------with account------------------");
+        Console.WriteLine("-----------All Customers with Repo------------------");
+
+        IUserRepository userRepository = new UserRepository(dbContext);
+
+        foreach (var user in userRepository.GetAll().ToList())
+        {
+            Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
+            }
+
+            Console.WriteLine("-----------with account------------------");
 
         foreach (var userAccount in userAccounts)
         {
