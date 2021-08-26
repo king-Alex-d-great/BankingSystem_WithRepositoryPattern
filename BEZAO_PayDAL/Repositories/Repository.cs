@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BEZAO_PayDAL.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly DbContext _context;
         private DbSet<TEntity> _entity;

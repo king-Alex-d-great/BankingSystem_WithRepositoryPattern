@@ -21,9 +21,9 @@ namespace BEZAO_PayDAL.UnitOfWork
             _context = context;
         }
 
-        public IRepository<Transaction> Transactions { get { return _transactions ??= _transactions = new Repository<Transaction>(_context); } } 
-        public IRepository<Account> Accounts { get { return _accounts ??= _accounts = new Repository<Account>(_context); } } 
-        public IRepository<User> Users { get { return _users ??= _users = new Repository<User>(_context); } }
+        public IRepository<Transaction> Transactions { get { return _transactions ??= _transactions = new TransactionRepository(_context); } } 
+        public IRepository<Account> Accounts { get { return _accounts ??= _accounts = new AccountRepository(_context); } } 
+        public IRepository<User> Users { get { return _users ??= _users = new UserRepository(_context); } }
        
         public int Commit()
         {
