@@ -12,50 +12,52 @@ namespace BEZAO_PayDAL.Repositories
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly DbContext _context;
+        private DbSet<TEntity> _entity;
         public Repository(DbContext context)
         {
             _context = context;
+            this._entity = context.Set<TEntity>();
         }
 
         public IQueryable<TEntity> GetAll()
         {
-          return _context.Set<TEntity>().AsQueryable();
+          return _entity.AsQueryable();
         }
 
 
         public TEntity Get(int id)
         {
-            return _context.Set<TEntity>().Find(id);
+            return _entity.Find(id);
         }
 
         public async Task<TEntity> GetAsync(int id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            return await _entity.FindAsync(id);
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _context.Set<TEntity>().Where(predicate).AsQueryable();
+            return _entity.Where(predicate).AsQueryable();
         }
 
         public void Add(TEntity entity)
-        { 
-            _context.Set<TEntity>().Add(entity);
+        {
+            _entity.Add(entity);
         }
 
         public async Task AddAsync(TEntity entity)
         {
-             await _context.Set<TEntity>().AddAsync(entity);
+             await _entity.AddAsync(entity);
         }
 
         public void AddRange(IList<TEntity> entities)
         {
-            _context.Set<TEntity>().AddRange(entities);
+            _entity.AddRange(entities);
         }
 
         public async Task AddRangeAsync(IList<TEntity> entities)
         {
-            await _context.Set<TEntity>().AddRangeAsync(entities);
+            await _entity.AddRangeAsync(entities);
         }
 
         public void Update(TEntity entity)
@@ -65,12 +67,12 @@ namespace BEZAO_PayDAL.Repositories
 
         public void Delete(TEntity entity)
         {
-            _context.Set<TEntity>().Remove(entity);
+            _entity.Remove(entity);
         }
 
         public void DeleteRange(IList<TEntity> entities)
         {
-            _context.Set<TEntity>().RemoveRange(entities);
+            _entity.RemoveRange(entities);
         }
     }
 }
