@@ -4,14 +4,16 @@ using BEZAO_PayDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BEZAO_PayDAL.Migrations
 {
     [DbContext(typeof(BezaoPayContext))]
-    partial class BezaoPayContextModelSnapshot : ModelSnapshot
+    [Migration("20210826115645_ModelChangesOnUser")]
+    partial class ModelChangesOnUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

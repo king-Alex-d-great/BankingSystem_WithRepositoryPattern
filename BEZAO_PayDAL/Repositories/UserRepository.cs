@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using BEZAO_PayDAL.Entities;
-using BEZAO_PayDAL.Interfaces;
+using BEZAO_PayDAL.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BEZAO_PayDAL.Repositories

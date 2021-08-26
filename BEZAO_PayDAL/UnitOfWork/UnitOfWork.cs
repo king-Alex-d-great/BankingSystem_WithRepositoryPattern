@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using BEZAO_PayDAL.Entities;
-using BEZAO_PayDAL.Interfaces;
+using BEZAO_PayDAL.Interfaces.Repositories;
 using BEZAO_PayDAL.Repositories;
 
 namespace BEZAO_PayDAL.UnitOfWork
 {
-    class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private BezaoPayContext _context;
+        private readonly BezaoPayContext _context;
 
         private IRepository<Transaction> _transactions;
         private IRepository<Account> _accounts;
@@ -20,14 +21,19 @@ namespace BEZAO_PayDAL.UnitOfWork
             _context = context;
         }
 
-        public IRepository<Transaction> Transactions { get { return _transactions ??= (_transactions = new Repository<Transaction>(_context)); } } 
-        public IRepository<Account> Accounts { get { return _accounts ??= (_accounts = new Repository<Account>(_context)); } } 
-        public IRepository<User> Users { get { return _users ??= (_users = new Repository<User>(_context)); } }
+        public IRepository<Transaction> Transactions { get { return _transactions ??= _transactions = new Repository<Transaction>(_context); } } 
+        public IRepository<Account> Accounts { get { return _accounts ??= _accounts = new Repository<Account>(_context); } } 
+        public IRepository<User> Users { get { return _users ??= _users = new Repository<User>(_context); } }
        
-        public void commit()
+        public int Commit()
         {
-            _context.SaveChanges();
-        }        
+           return _context.SaveChanges();
+        }
+
+        public async Task<int> CommitAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
 
         public void Dispose()
         {
