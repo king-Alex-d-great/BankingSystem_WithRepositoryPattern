@@ -83,9 +83,8 @@ namespace BEZAO_PayDAL.DataInitializer
             };
 
             modelBuilder.Entity<Account>().HasData(Accounts);
-           //modelBuilder.Entity<User>().HasData(Users);
-           // modelBuilder.Entity<Transaction>().HasData(Transactions);
-
+            modelBuilder.Entity<User>().HasData(Users);
+            modelBuilder.Entity<Transaction>().HasData(Transactions);
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BEZAO_PayDAL.Migrations
 {
     [DbContext(typeof(BezaoPayContext))]
-    [Migration("20210824114637_Initial")]
-    partial class Initial
+    [Migration("20210826081233_somethingnice1")]
+    partial class somethingnice1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,6 +38,38 @@ namespace BEZAO_PayDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountNumber = 760015555,
+                            Balance = 23456782340m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountNumber = 222833403,
+                            Balance = 56000000000m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountNumber = 456723646,
+                            Balance = 78345678230m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountNumber = 1642347213,
+                            Balance = 63723456780m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountNumber = 753485382,
+                            Balance = 88978234000m
+                        });
                 });
 
             modelBuilder.Entity("BEZAO_PayDAL.Entities.Transaction", b =>
@@ -76,6 +108,9 @@ namespace BEZAO_PayDAL.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -95,6 +130,58 @@ namespace BEZAO_PayDAL.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 1,
+                            Birthday = new DateTime(1990, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Created = new DateTime(2021, 8, 26, 9, 12, 32, 935, DateTimeKind.Local).AddTicks(139),
+                            Email = "sorry.sir@abeg.com",
+                            IsActive = true,
+                            Name = "Francis Sorry"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 2,
+                            Birthday = new DateTime(1420, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Created = new DateTime(2021, 8, 26, 9, 12, 32, 936, DateTimeKind.Local).AddTicks(9198),
+                            Email = "badguy@BBA.com",
+                            IsActive = true,
+                            Name = "GrandMaster KC"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 3,
+                            Birthday = new DateTime(1420, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Created = new DateTime(2021, 8, 26, 9, 12, 32, 936, DateTimeKind.Local).AddTicks(9278),
+                            Email = "dara.sage@ned.com",
+                            IsActive = true,
+                            Name = "Dara John"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 4,
+                            Birthday = new DateTime(1420, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Created = new DateTime(2021, 8, 26, 9, 12, 32, 936, DateTimeKind.Local).AddTicks(9284),
+                            Email = "sadboy@BBA.com",
+                            IsActive = true,
+                            Name = "Kachi !Thename"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 5,
+                            Birthday = new DateTime(1420, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Created = new DateTime(2021, 8, 26, 9, 12, 32, 936, DateTimeKind.Local).AddTicks(9288),
+                            Email = "omo@BBA.com",
+                            IsActive = true,
+                            Name = "Sammy ROCBAFDEZ"
+                        });
                 });
 
             modelBuilder.Entity("BEZAO_PayDAL.Entities.Transaction", b =>

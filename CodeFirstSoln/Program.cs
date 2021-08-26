@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeFirstSoln
 {
-    class Program
+    partial class Program
     {
         static void Main(string[] args)
         {
@@ -72,66 +72,66 @@ namespace CodeFirstSoln
             var userAccounts = dbContext.Users.Include(u => u.Account);
             // var users = dbContext.Users.ToList();
 
-        foreach (var user in users)
-        {
-            Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
-        }
+            foreach (var user in users)
+            {
+                Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
+            }
 
-        Console.WriteLine("-----------All Customers with Repo------------------");
+            Console.WriteLine("-----------All Customers with Repo------------------");
 
-        IUserRepository userRepository = new UserRepository(dbContext);
+            IUserRepository userRepository = new UserRepository(dbContext);
 
-        foreach (var user in userRepository.GetAll().ToList())
-        {
-            Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
+            foreach (var user in userRepository.GetAll().ToList())
+            {
+                Console.WriteLine($"{user.Name} {user.Email} {user.IsActive}");
             }
 
             Console.WriteLine("-----------with account------------------");
 
-        foreach (var userAccount in userAccounts)
-        {
-            Console.WriteLine($"Name: {userAccount.Name}, : {userAccount.Account.AccountNumber}, Balance: {userAccount.Account.Balance} ");
-        }
+            foreach (var userAccount in userAccounts)
+            {
+                Console.WriteLine($"Name: {userAccount.Name}, : {userAccount.Account.AccountNumber}, Balance: {userAccount.Account.Balance} ");
+            }
 
 
-        Console.WriteLine("-----------Active Customers------------------");
+            Console.WriteLine("-----------Active Customers------------------");
 
-        foreach (var userAccount in userAccounts.Where(u => u.IsActive))
-        {
-            Console.WriteLine($"Name: {userAccount.Name}, : {userAccount.Account.AccountNumber}, Balance: {userAccount.Account.Balance} ");
-        }
+            foreach (var userAccount in userAccounts.Where(u => u.IsActive))
+            {
+                Console.WriteLine($"Name: {userAccount.Name}, : {userAccount.Account.AccountNumber}, Balance: {userAccount.Account.Balance} ");
+            }
 
             Console.WriteLine("Done!");
 
 
             Console.WriteLine("-----------Single Customer------------------");
 
-          var oneCustomer =  userAccounts.FirstOrDefault();
+            var oneCustomer = userAccounts.FirstOrDefault();
 
-          var someUser = dbContext.Users.Find(1);
-          dbContext.Users.Remove(someUser);
+            var someUser = dbContext.Users.Find(1);
+            dbContext.Users.Remove(someUser);
 
-          dbContext.SaveChanges();
+            dbContext.SaveChanges();
 
 
             //update
-        oneCustomer.Name = "Pope Francis";
-        oneCustomer.Account.Balance += 1_000;
-
-         
+            oneCustomer.Name = "Pope Francis";
+            oneCustomer.Account.Balance += 1_000;
 
 
 
-          dbContext.SaveChanges();
 
 
-          Console.WriteLine(oneCustomer?.Name ?? "No Name");
-          Console.WriteLine(oneCustomer?.Account.Balance ?? 0);
+            dbContext.SaveChanges();
+
+
+            Console.WriteLine(oneCustomer?.Name ?? "No Name");
+            Console.WriteLine(oneCustomer?.Account.Balance ?? 0);
 
         }
 
 
 
-        
+
     }
 }

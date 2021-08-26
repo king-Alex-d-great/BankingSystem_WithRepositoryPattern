@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BEZAO_PayDAL.Migrations
 {
     [DbContext(typeof(BezaoPayContext))]
-    [Migration("20210824115406_AddBirthdayColumnToUsersTable")]
-    partial class AddBirthdayColumnToUsersTable
+    [Migration("20210826080908_somethingnice")]
+    partial class somethingnice
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,6 +38,38 @@ namespace BEZAO_PayDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountNumber = 760015555,
+                            Balance = 23456782340m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountNumber = 222833403,
+                            Balance = 56000000000m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountNumber = 456723646,
+                            Balance = 78345678230m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountNumber = 1642347213,
+                            Balance = 63723456780m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountNumber = 753485382,
+                            Balance = 88978234000m
+                        });
                 });
 
             modelBuilder.Entity("BEZAO_PayDAL.Entities.Transaction", b =>

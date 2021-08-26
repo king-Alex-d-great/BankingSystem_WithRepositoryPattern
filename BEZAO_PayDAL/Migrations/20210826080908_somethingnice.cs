@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BEZAO_PayDAL.Migrations
 {
-    public partial class Initial : Migration
+    public partial class somethingnice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,6 +29,7 @@ namespace BEZAO_PayDAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
@@ -64,6 +65,18 @@ namespace BEZAO_PayDAL.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "AccountNumber", "Balance" },
+                values: new object[,]
+                {
+                    { 1, 760015555, 23456782340m },
+                    { 2, 222833403, 56000000000m },
+                    { 3, 456723646, 78345678230m },
+                    { 4, 1642347213, 63723456780m },
+                    { 5, 753485382, 88978234000m }
                 });
 
             migrationBuilder.CreateIndex(
