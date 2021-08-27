@@ -21,11 +21,11 @@ namespace CodeFirstSoln
           //Login();
           //UpdateUser(); 
           GetUsers(); 
-          DeleteUSer(); 
+          /*DeleteUSer(); 
           GetAccounts(); 
           Transfer();
           Deposit();
-          Withdrawal(); 
+          Withdrawal(); */
 
         }
 

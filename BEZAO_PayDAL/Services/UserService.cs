@@ -119,7 +119,8 @@ namespace BEZAO_PayDAL.Services
             try
             {
                 var user = _unitOfWork.Users.Get(id);
-
+                Console.WriteLine(user.Email);
+                Console.WriteLine(user.Name);
             }
             catch (Exception error)
             {
