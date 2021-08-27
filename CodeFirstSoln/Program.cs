@@ -17,14 +17,14 @@ namespace CodeFirstSoln
         static void Main(string[] args)
         {
             EnrollUser(); 
-            //Login(); working
-            // UpdateUser(); workin
-            //getUsers(); workin
-            //DeleteUSer(); workin
-            //GetAccounts(); workin
-            //Transfer(); working
-            // Deposit(); working
-            //Withdrawal(); workin
+            //Login();
+            // UpdateUser(); 
+            //getUsers(); 
+            //DeleteUSer(); 
+            //GetAccounts(); 
+            //Transfer();
+            // Deposit();
+            //Withdrawal(); 
 
         }
 
