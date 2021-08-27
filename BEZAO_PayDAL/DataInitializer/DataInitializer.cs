@@ -19,7 +19,7 @@ namespace BEZAO_PayDAL.DataInitializer
                      Email = "sorry.sir@abeg.com",Birthday = new DateTime(1990,10,24),
                      Created = DateTime.Now,
                      IsActive = true,
-                     AccountId=1
+                     AccountId=1, Username="francissorry", Password= "1234"
                  },
                  new User
                  {
@@ -28,7 +28,7 @@ namespace BEZAO_PayDAL.DataInitializer
                      Birthday = new DateTime(1420,10,30),
                      Email = "badguy@BBA.com",
                      Created = DateTime.Now, IsActive = true,
-                     AccountId=2
+                     AccountId=2, Username="grandmasterkc", Password= "1234"
                  },
 
                  new User
@@ -38,7 +38,7 @@ namespace BEZAO_PayDAL.DataInitializer
                      Birthday = new DateTime(1420,10,30),
                      Email = "dara.sage@ned.com",
                      Created = DateTime.Now, IsActive = true,
-                     AccountId=3
+                     AccountId=3, Username="darajohn", Password= "1234"
                  },
 
                  new User
@@ -48,7 +48,7 @@ namespace BEZAO_PayDAL.DataInitializer
                      Birthday = new DateTime(1420,10,30),
                      Email = "sadboy@BBA.com",
                      Created = DateTime.Now, IsActive = true,
-                    AccountId=4
+                    AccountId=4, Username="kachi!thename", Password= "1234"
                  },
 
 
@@ -59,7 +59,7 @@ namespace BEZAO_PayDAL.DataInitializer
                      Birthday = new DateTime(1420,10,30),
                      Email = "omo@BBA.com",
                      Created = DateTime.Now, IsActive = true,
-                     AccountId=5, 
+                     AccountId=5, Username="sammyrocbafdez", Password= "1234"
                  },
 
             };

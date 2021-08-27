@@ -1,14 +1,14 @@
-﻿using BEZAO_PayDAL.Model;
+﻿using BEZAO_PayDAL.Entities;
+using BEZAO_PayDAL.Model;
 
 namespace BEZAO_PayDAL.Interfaces.Services
 {
     public  interface IUserService
     {
         void Register(RegisterViewModel model);
-        void Update(UpdateViewModel model);
+        int Update(UpdateViewModel model, int Id);
         void Login(LoginViewModel model);
-        void Delete(int id);
+        User Delete(int id, out int affectedRow);
         void Get(int id);
-
     }
 }

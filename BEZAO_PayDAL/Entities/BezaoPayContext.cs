@@ -21,7 +21,7 @@ namespace BEZAO_PayDAL.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=CFBEZAOPay; Integrated Security=True;Connect Timeout=30");
+            optionsBuilder.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=CFBEZAOPay; Integrated Security=True;Connect Timeout=30;  ");
             base.OnConfiguring(optionsBuilder);
         }
 

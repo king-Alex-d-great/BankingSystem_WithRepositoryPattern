@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BEZAO_PayDAL.Entities;
 using BEZAO_PayDAL.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,11 +28,12 @@ namespace BEZAO_PayDAL.Repositories
 
         public TEntity Get(int id)
         {
+            
             return _entity.Find(id);
         }
 
         public async Task<TEntity> GetAsync(int id)
-        {
+        {            
             return await _entity.FindAsync(id);
         }
 
@@ -74,5 +76,7 @@ namespace BEZAO_PayDAL.Repositories
         {
             _entity.RemoveRange(entities);
         }
+
+        
     }
 }

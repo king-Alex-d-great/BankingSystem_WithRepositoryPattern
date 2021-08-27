@@ -1,8 +1,10 @@
-﻿namespace BEZAO_PayDAL.Interfaces.Services
+﻿using BEZAO_PayDAL.Entities;
+
+namespace BEZAO_PayDAL.Interfaces.Services
 {
     public interface IAccountService
     {
-        void Get(int userId);
+        Account Get(int userId);
 
     }
 }
