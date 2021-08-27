@@ -25,8 +25,19 @@ namespace BEZAO_PayDAL.Services
                 if (!Validate(model))
                 {
                     return;
-                }               
-                Hasher.applyHashing(model);
+                }
+                var user = new User
+                {
+                    Name = $"{model.FirstName} {model.LastName}",
+                    Email = model.Email,
+                    Birthday = model.Birthday,
+                    Username = model.Username,
+                    IsActive = true,
+                    Password = model.ConfirmPassword,
+                    Account = new Account { AccountNumber = 123456789 },
+                    Created = DateTime.Now,
+                };
+                _unitOfWork.Users.Add(user);
                 _unitOfWork.Commit();
                 Console.WriteLine("Success!");
             }
@@ -158,26 +169,26 @@ namespace BEZAO_PayDAL.Services
         }
 
 
-           /* public bool validateLoginDetails(string userNameEmail, string password, out User user)
-            {
-                user = null;
-                var isValidated = false;
-
-                var queryableuser = _unitOfWork.Users.Find(a => a.Password == password && (a.Username == userNameEmail || a.Email == userNameEmail));
-                foreach (var item in queryableuser)
-                {
-                    if (item != null)
-                    {
-                        user = item;
-                        isValidated = true;
-                        return isValidated;
-                    }
-                }
-                Console.WriteLine("Your username or password is Incorrect\nor you aren't registered to this service\n");
-                return false;
-            }*/
-
         public bool validateLoginDetails(string userNameEmail, string password, out User user)
+        {
+            user = null;
+            var isValidated = false;
+
+            var queryableuser = _unitOfWork.Users.Find(a => a.Password == password && (a.Username == userNameEmail || a.Email == userNameEmail));
+            foreach (var item in queryableuser)
+            {
+                if (item != null)
+                {
+                    user = item;
+                    isValidated = true;
+                    return isValidated;
+                }
+            }
+            Console.WriteLine("Your username or password is Incorrect\nor you aren't registered to this service\n");
+            return false;
+        }
+
+        /*public bool validateLoginDetails(string userNameEmail, string password, out User user)
         {
             user = null;
             var isValidated = false;
@@ -194,7 +205,7 @@ namespace BEZAO_PayDAL.Services
             
             for (int i = 0; i < 20; i++)
                 if (hashBytes[i + 16] != hash[i])
-                    throw new UnauthorizedAccessException();
+                    Console.WriteLine("invalid user"); ;
 
             var queryableuser = _unitOfWork.Users.Find(a => a.Password == password && (a.Username == userNameEmail || a.Email == userNameEmail));
             foreach (var item in queryableuser)
@@ -209,6 +220,6 @@ namespace BEZAO_PayDAL.Services
             Console.WriteLine("Your username or password is Incorrect\nor you aren't registered to this service\n");
             return false;
         }
-
+*/
     }
 }
