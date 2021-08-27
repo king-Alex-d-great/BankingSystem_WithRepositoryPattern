@@ -37,7 +37,7 @@ namespace BEZAO_PayDAL.Services
                 };
                 _unitOfWork.Users.Add(user);
                 _unitOfWork.Commit();
-                Console.WriteLine("Success!");
+                Console.WriteLine("Success!\n");
             }
             catch (Exception error)
             {
@@ -53,7 +53,7 @@ namespace BEZAO_PayDAL.Services
             try
             {
                 var user = _unitOfWork.Users.Get(Id);
-                Console.WriteLine(user.Username);
+                
                 user.Email = model.Email ??= user.Email;
                 user.Username = model.Username ??= user.Username;
 
@@ -66,7 +66,7 @@ namespace BEZAO_PayDAL.Services
                     Console.WriteLine("Confirm password field did not match newpassword field ");
                 }
                 affectedRow = _unitOfWork.Commit();
-                Console.WriteLine("User Updated successfully");
+                Console.WriteLine("User Updated successfully\n\n");
                 return affectedRow;
             }
             catch (Exception error)
@@ -89,7 +89,7 @@ namespace BEZAO_PayDAL.Services
 
                     if (isValidated)
                     {
-                        Console.WriteLine(" login Successful");
+                        Console.WriteLine(" login Successful\n\n");
                         Console.WriteLine($"Welcome {user.Name}");
                     }
                 }
@@ -104,7 +104,7 @@ namespace BEZAO_PayDAL.Services
                 var result = _unitOfWork.Users.Get(id);
                 _unitOfWork.Users.Delete(result);
                 affectedRow = _unitOfWork.Commit();
-                Console.WriteLine($"User : {id} deleted");
+                Console.WriteLine($"User : {id} deleted\n\n");
                 return result;
             }
             catch (Exception error)
@@ -120,9 +120,6 @@ namespace BEZAO_PayDAL.Services
             {
                 var user = _unitOfWork.Users.Get(id);
 
-                Console.WriteLine(user.Name);
-                Console.WriteLine(user.Username);
-                Console.WriteLine(user.Password);
             }
             catch (Exception error)
             {

@@ -16,15 +16,16 @@ namespace CodeFirstSoln
     {
         static void Main(string[] args)
         {
-            EnrollUser(); 
-            //Login();
-            // UpdateUser(); 
-            //getUsers(); 
-            //DeleteUSer(); 
-            //GetAccounts(); 
-            //Transfer();
-            // Deposit();
-            //Withdrawal(); 
+           
+         // EnrollUser(); 
+          //Login();
+          //UpdateUser(); 
+          GetUsers(); 
+          DeleteUSer(); 
+          GetAccounts(); 
+          Transfer();
+          Deposit();
+          Withdrawal(); 
 
         }
 
@@ -53,7 +54,7 @@ namespace CodeFirstSoln
         static void GetUsers ()
         {
             IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
-            userService.Get(3);
+            userService.Get(4);
         }
 
         static void GetAccounts ()
