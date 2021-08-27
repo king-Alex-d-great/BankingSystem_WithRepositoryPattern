@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using BEZAO_PayDAL.Entities;
+using BEZAO_PayDAL.Model;
 
 namespace BEZAO_PayDAL.Encryption
 {
@@ -8,12 +9,12 @@ namespace BEZAO_PayDAL.Encryption
     {       
         static BezaoPayContext DBContext = new BezaoPayContext();
 
-        public static void applyHashing( string _password)
+        public static void applyHashing(RegisterViewModel model)
         {
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
 
-            var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, 100000);
+            var pbkdf2 = new Rfc2898DeriveBytes(model.Password, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);
 
             byte[] hashBytes = new byte[36];
