@@ -16,7 +16,7 @@ namespace CodeFirstSoln
     {
         static void Main(string[] args)
         {
-            //EnrollUser(); workin
+            EnrollUser(); 
             //Login(); working
             // UpdateUser(); workin
             //getUsers(); workin
@@ -30,50 +30,50 @@ namespace CodeFirstSoln
 
         static void EnrollUser()
         {
-            IUserService userService = new UserService(new UnitOfWork(new BezaoPayContext()));
+            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             userService.Register(new RegisterViewModel{FirstName = "Junior", LastName = "Nwokolo", Email = "junior.sage@omekannaya.com", Username = "Sage",
             Birthday = new DateTime(2000, 01, 22), Password = "1234@one", ConfirmPassword = "1234@one"});            
         }
         static void Login ()
         {
-            IUserService userService = new UserService(new UnitOfWork(new BezaoPayContext()));
+            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             userService.Login(new LoginViewModel { Password = "1234", UsernameEmail = "darajohn" });
         }
         static void UpdateUser ()
         {
-            IUserService userService = new UserService(new UnitOfWork(new BezaoPayContext()));
+            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             userService.Update(new UpdateViewModel { Email = "Alexandra@gmail.com",  }, 2 );
         }
         static void DeleteUSer ()
         {
-            IUserService userService = new UserService(new UnitOfWork(new BezaoPayContext()));
+            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             int AffectedRow;
             userService.Delete(6, out AffectedRow);
         }
         static void GetUsers ()
         {
-            IUserService userService = new UserService(new UnitOfWork(new BezaoPayContext()));
+            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             userService.Get(3);
         }
 
         static void GetAccounts ()
         {
-            IAccountService accountService = new AccountService(new UnitOfWork(new BezaoPayContext()));
+            IAccountService accountService = new AccountService(new UnitOfWorkMAin(new BezaoPayContext()));
             accountService.Get(2);
         }
         static void Transfer ()
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWork(new BezaoPayContext()));
+            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
             TransService.Transfer(new TransferViewModel { Amount = 500000, RecipientAccountNumber = 0760015555, SenderAccountNumber = 0222833403 });
         }
         static void Deposit ()
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWork(new BezaoPayContext()));
+            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
             TransService.Deposit(new DepositViewModel { Amount = 4000000, RecipientAccountNumber = 0760015555 });
         }
         static void Withdrawal ()
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWork(new BezaoPayContext()));
+            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
             TransService.Withdraw(new WithdrawalViewModel { Amount = 75000000, AccountNumber = 0760015555 });
         }
     }

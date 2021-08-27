@@ -8,7 +8,7 @@ using BEZAO_PayDAL.Repositories;
 
 namespace BEZAO_PayDAL.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWorkMAin : IUnitOfWork
     {
         private readonly BezaoPayContext _context;
 
@@ -16,7 +16,7 @@ namespace BEZAO_PayDAL.UnitOfWork
         private IRepository<Account> _accounts;
         private IRepository<User> _users;
 
-        public UnitOfWork(BezaoPayContext context)
+        public UnitOfWorkMAin(BezaoPayContext context)
         {
             _context = context;
         }

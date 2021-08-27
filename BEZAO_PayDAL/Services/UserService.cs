@@ -1,4 +1,5 @@
 ﻿using System;
+using BEZAO_PayDAL.Encryption;
 using BEZAO_PayDAL.Entities;
 using BEZAO_PayDAL.Interfaces.Services;
 using BEZAO_PayDAL.Model;
@@ -23,7 +24,6 @@ namespace BEZAO_PayDAL.Services
                 {
                     return;
                 }
-
                 var user = new User
                 {
                     Name = $"{model.FirstName} {model.LastName}",
@@ -35,7 +35,7 @@ namespace BEZAO_PayDAL.Services
                     Account = new Account { AccountNumber = 1209374652 },
                     Created = DateTime.Now
                 };
-                _unitOfWork.Users.Add(user);
+                Hasher.applyHashing(model.Password);
                 _unitOfWork.Commit();
                 Console.WriteLine("Success!");
             }
@@ -53,7 +53,7 @@ namespace BEZAO_PayDAL.Services
             try
             {
                 var user = _unitOfWork.Users.Get(Id);
-                Console.WriteLine(user.Username);
+               
                 user.Email = model.Email ??= user.Email;
                 user.Username = model.Username ??= user.Username;
 
