@@ -138,13 +138,13 @@ namespace BEZAO_PayDAL.Services
             model.Birthday == new DateTime() ? "Invalid date" :
             string.IsNullOrWhiteSpace(model.Password) ? ErrorMenu("Password") :
             model.Password != model.ConfirmPassword ? "Your passwords dont match!" :
-            "A field is required";
+            string.Empty;
 
             if (string.IsNullOrWhiteSpace(error))
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
         string ErrorMenu(string name)
         {
