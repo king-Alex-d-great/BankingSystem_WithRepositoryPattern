@@ -1,47 +1,38 @@
 ﻿using System;
 using System.Security.Cryptography;
-using BEZAO_PayDAL.Entities;
 
 namespace BEZAO_PayDAL.Encryption
 {
-    class Hasher
+    public static class Hasher
     {
-        string _password;
-        BezaoPayContext DBContext = new BezaoPayContext();
+        static string  pepper = "KingAlexWroteThis";
+        static string  _pepper;
+        static RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
 
-
-        public Hasher(string password)
+        private static string Pepper
         {
-            _password = password;
-
+            get
+            {                             
+                var pepper = new byte[8];
+                rand.GetBytes(pepper);
+                _pepper = BitConverter.ToString(pepper).ToLower() + pepper;
+                return _pepper;
+            }
         }
 
-        public void applyHashing()
+        public static string getSalt()
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, 100000);
-            byte[] hash = pbkdf2.GetBytes(20);
-
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-
-            string savedPasswordHash = Convert.ToBase64String(hashBytes);
-            DBContext.Users.Add(new User
-            {
-                Id = 1,
-                Name = "Francis Sorry",
-                Email = "sorry.sir@abeg.com",
-                Birthday = new DateTime(1990, 10, 24),
-                Created = DateTime.Now,
-                IsActive = true,
-                AccountId = 1,
-                Username = "francissorry",
-                Password = savedPasswordHash
-            });           
+            var salt = new byte[16];
+            rand.GetBytes(salt);
+            return BitConverter.ToString(salt).ToLower();
         }
-        
+
+        public static string hashPassword(byte[] password, byte[] salt)
+        {
+            var securePassword = new Rfc2898DeriveBytes(password, salt, 10000);
+            var saltedPassword = Convert.ToBase64String(securePassword.GetBytes(30));
+            var Password = saltedPassword + _pepper;
+            return Password;
+        }
     }
 }
