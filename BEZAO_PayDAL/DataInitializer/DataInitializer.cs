@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using BEZAO_PayDAL.Encryption;
 using BEZAO_PayDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,11 @@ namespace BEZAO_PayDAL.DataInitializer
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            var saltOne = Hasher.getSalt();
+            var saltTwo = Hasher.getSalt();
+            var saltThree = Hasher.getSalt();
+            var saltFour = Hasher.getSalt();
+            var saltFive = Hasher.getSalt();
 
             var Users = new List<User>
             {
@@ -16,10 +23,14 @@ namespace BEZAO_PayDAL.DataInitializer
                  {
                      Id= 1,
                      Name = "Francis Sorry",
-                     Email = "sorry.sir@abeg.com",Birthday = new DateTime(1990,10,24),
+                     Email = "sorry.sir@abeg.com",
+                     Birthday = new DateTime(1990,10,24),
                      Created = DateTime.Now,
                      IsActive = true,
-                     AccountId=1, Username="francissorry", Password= "1234"
+                     AccountId=1,
+                     Username="francissorry",
+                     Salt = saltFive,
+                     Password= Hasher.hashPassword(Encoding.UTF8.GetBytes("1234"), Encoding.UTF8.GetBytes(saltFive)),
                  },
                  new User
                  {
@@ -27,8 +38,12 @@ namespace BEZAO_PayDAL.DataInitializer
                      Name = "GrandMaster KC",
                      Birthday = new DateTime(1420,10,30),
                      Email = "badguy@BBA.com",
-                     Created = DateTime.Now, IsActive = true,
-                     AccountId=2, Username="grandmasterkc", Password= "1234"
+                     Created = DateTime.Now,
+                     IsActive = true,
+                     AccountId=2,
+                     Username="grandmasterkc",
+                     Salt = saltFour,
+                     Password= Hasher.hashPassword(Encoding.UTF8.GetBytes("1234"), Encoding.UTF8.GetBytes(saltFour)),
                  },
 
                  new User
@@ -37,8 +52,12 @@ namespace BEZAO_PayDAL.DataInitializer
                      Name = "Dara John",
                      Birthday = new DateTime(1420,10,30),
                      Email = "dara.sage@ned.com",
-                     Created = DateTime.Now, IsActive = true,
-                     AccountId=3, Username="darajohn", Password= "1234"
+                     Created = DateTime.Now,
+                     IsActive = true,
+                     AccountId=3,
+                     Username="darajohn",
+                     Salt = saltThree,
+                     Password= Hasher.hashPassword(Encoding.UTF8.GetBytes("1234"), Encoding.UTF8.GetBytes(saltThree)),
                  },
 
                  new User
@@ -47,8 +66,12 @@ namespace BEZAO_PayDAL.DataInitializer
                      Name = "Kachi !Thename",
                      Birthday = new DateTime(1420,10,30),
                      Email = "sadboy@BBA.com",
-                     Created = DateTime.Now, IsActive = true,
-                    AccountId=4, Username="kachi!thename", Password= "1234"
+                     Created = DateTime.Now,
+                     IsActive = true,
+                     AccountId = 4,
+                     Username="kachi!thename",
+                     Salt = saltTwo,
+                     Password= Hasher.hashPassword(Encoding.UTF8.GetBytes("1234"), Encoding.UTF8.GetBytes(saltTwo)),
                  },
 
 
@@ -58,8 +81,11 @@ namespace BEZAO_PayDAL.DataInitializer
                      Name = "Sammy ROCBAFDEZ",
                      Birthday = new DateTime(1420,10,30),
                      Email = "omo@BBA.com",
-                     Created = DateTime.Now, IsActive = true,
-                     AccountId=5, Username="sammyrocbafdez", Password= "1234"
+                     Created = DateTime.Now,
+                     IsActive = true,
+                     AccountId=5, Username="sammyrocbafdez",
+                     Salt = saltOne,
+                     Password= Hasher.hashPassword(Encoding.UTF8.GetBytes("1234"), Encoding.UTF8.GetBytes(saltOne)),
                  },
 
             };

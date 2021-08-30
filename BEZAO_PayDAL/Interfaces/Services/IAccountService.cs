@@ -6,5 +6,7 @@ namespace BEZAO_PayDAL.Interfaces.Services
     {
         Account Get(int userId);
 
+        void checkBalance(User user);
+
     }
 }

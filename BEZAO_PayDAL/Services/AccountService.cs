@@ -29,7 +29,20 @@ namespace BEZAO_PayDAL.Services
                 Console.WriteLine(error.Message);
             }
                 return account;
-
         }
+
+        public void checkBalance(User user)
+        {           
+            try
+            {
+                var account = _unitOfWork.Accounts.Get(user.Id);
+                Console.WriteLine(account.Balance);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+           
+        }        
     }
 }

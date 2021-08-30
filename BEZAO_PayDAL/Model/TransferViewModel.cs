@@ -1,6 +1,8 @@
-﻿namespace BEZAO_PayDAL.Model
+﻿using BEZAO_PayDAL.Interfaces;
+
+namespace BEZAO_PayDAL.Model
 {
-    public class TransferViewModel
+    public class TransferViewModel : IViewModel
     {
         public int SenderAccountNumber { get; set; }
         public int RecipientAccountNumber { get; set; }

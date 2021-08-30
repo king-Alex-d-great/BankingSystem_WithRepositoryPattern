@@ -1,81 +1,289 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using BEZAO_PayDAL.Entities;
-using BEZAO_PayDAL.Interfaces.Repositories;
 using BEZAO_PayDAL.Interfaces.Services;
 using BEZAO_PayDAL.Model;
-using BEZAO_PayDAL.Repositories;
 using BEZAO_PayDAL.Services;
 using BEZAO_PayDAL.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeFirstSoln
 {
     partial class Program
     {
+
         static void Main(string[] args)
         {
-           
-         // EnrollUser(); 
-          //Login();
-          //UpdateUser(); 
-          GetUsers(); 
-          /*DeleteUSer(); 
-          GetAccounts(); 
-          Transfer();
-          Deposit();
-          Withdrawal(); */
+            Run();
+
+            //return SelectedLanguageOption;
+
+            //EnrollUser(); 
+            //Login();
+            //UpdateUser(); 
+            //GetUsers(); 
+            //DeleteUSer();
+            /*GetAccounts();
+            Transfer();
+            Deposit();
+            Withdrawal();*/
 
         }
 
         static void EnrollUser()
         {
-            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
-            userService.Register(new RegisterViewModel{FirstName = "Junior", LastName = "Nwokolo", Email = "junior.sage@omekannaya.com", Username = "Sage",
-            Birthday = new DateTime(2000, 01, 22), Password = "1234@one", ConfirmPassword = "1234@one"});            
+            try
+            {
+
+
+                Console.WriteLine("Enter your firstname");
+                var firstname = Console.ReadLine();
+                Console.WriteLine("Enter your lastname");
+                var lastname = Console.ReadLine();
+                Console.WriteLine("Enter your Email");
+                var email = Console.ReadLine();
+                Console.WriteLine("Would you like your email to also be your username?\n 1: Yes\n2: No");
+                var emailAsUsernameReply = Console.ReadLine();
+                string username;
+                if (emailAsUsernameReply == "1")
+                {
+                    username = email;
+                }
+                else
+                {
+                    Console.WriteLine("Enter your username");
+                    username = Console.ReadLine();
+                }
+                Console.WriteLine("Enter your password");
+                var password = Console.ReadLine();
+                Console.WriteLine("Enter Confirm password ");
+                var cPassword = Console.ReadLine();
+
+                IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
+                userService.Register(new RegisterViewModel
+                {
+                    FirstName = firstname,
+                    LastName = lastname,
+                    Email = email,
+                    Username = username,
+                    Birthday = new DateTime(2000, 01, 22),
+                    Password = password,
+                    ConfirmPassword = cPassword
+                });
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
         }
-        static void Login ()
+        public static void Login()
+        {
+            try
+            {
+                // start:
+                Console.WriteLine("Enter your username");
+                var username = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    UserService.ErrorMessage("username", out int count);
+                    if (count >= 2)
+                        return;
+                }
+                Console.WriteLine("Enter your password");
+                var password = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    UserService.ErrorMessage("password", out int count);
+                    if (count >= 2)
+                        return;
+                }
+                IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
+                var LoggedInUser = userService.Login(new LoginViewModel { Password = password, UsernameEmail = username }, out Account account);
+
+                if (LoggedInUser != null)
+                {
+                    MainMenu(LoggedInUser, account);
+                }
+                else
+                {
+                    DisplayPrompt();
+                    return;
+                }
+                return;
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+
+        }
+        public static void UpdateUser()
         {
             IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
-            userService.Login(new LoginViewModel { Password = "1234", UsernameEmail = "darajohn" });
+            userService.Update(new UpdateViewModel { Email = "Alexagmail.com", NewPassword = "77888", CurrentPassword = "1234", ConfirmNewPassword = "77888" }, 4);
         }
-        static void UpdateUser ()
-        {
-            IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
-            userService.Update(new UpdateViewModel { Email = "Alexandra@gmail.com",  }, 2 );
-        }
-        static void DeleteUSer ()
+        public static void DeleteUSer()
         {
             IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             int AffectedRow;
-            userService.Delete(6, out AffectedRow);
+            userService.Delete(7, out AffectedRow);
         }
-        static void GetUsers ()
+        public static void GetUsers()
         {
             IUserService userService = new UserService(new UnitOfWorkMAin(new BezaoPayContext()));
             userService.Get(4);
         }
 
-        static void GetAccounts ()
+        public static void GetAccounts()
         {
             IAccountService accountService = new AccountService(new UnitOfWorkMAin(new BezaoPayContext()));
             accountService.Get(2);
         }
-        static void Transfer ()
+
+        public static void GetBalance(User user)
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
-            TransService.Transfer(new TransferViewModel { Amount = 500000, RecipientAccountNumber = 0760015555, SenderAccountNumber = 0222833403 });
+            try
+            {
+                IAccountService accountService = new AccountService(new UnitOfWorkMAin(new BezaoPayContext()));
+                accountService.checkBalance(user);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+
         }
-        static void Deposit ()
+        public static void Transfer(Account account)
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
-            TransService.Deposit(new DepositViewModel { Amount = 4000000, RecipientAccountNumber = 0760015555 });
+            int count = 0;
+            int countTwo = 0;
+        start:
+            Console.WriteLine("How much will you like to transfer?");
+            int recipientAccountNumber = 0;
+            decimal amount = 0;
+            try
+            {
+                amount = Convert.ToDecimal(Console.ReadLine());
+            startTwo:
+                Console.WriteLine("Enter receiver's account number");
+                try
+                {
+                    recipientAccountNumber = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    if (recipientAccountNumber + 0 == 0 && countTwo < 2)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid account number\nTry again");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        countTwo++;
+                        goto startTwo;
+                    }
+                    if (countTwo >= 2)
+                    {
+                        DisplayPrompt();
+                        return;
+                    }
+                       
+                }
+
+                ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
+                TransService.Transfer(new TransferViewModel { Amount = amount, RecipientAccountNumber = recipientAccountNumber, SenderAccountNumber = account.AccountNumber });
+            }
+            catch (FormatException)
+            {
+                if (amount + 0 == 0 && count != 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.WriteLine("Amount cannot be empty\nTry again");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    count++;
+                    goto start;
+                }
+                if (count == 2)
+                    DisplayPrompt();
+            }
+            catch (Exception error)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+                DisplayPrompt();
+            }
         }
-        static void Withdrawal ()
+        public static void Deposit(Account account)
         {
-            ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
-            TransService.Withdraw(new WithdrawalViewModel { Amount = 75000000, AccountNumber = 0760015555 });
+            int count = 0;
+        start:
+            Console.WriteLine("Enter amount being deposited");
+            decimal amount = 0;
+            try
+            {
+                amount = Convert.ToDecimal(Console.ReadLine());
+                ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
+                TransService.Deposit(new DepositViewModel { Amount = amount, RecipientAccountNumber = account.AccountNumber });
+            }
+            catch (FormatException)
+            {
+                if (amount + 0 == 0 && count != 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.WriteLine("Amount cannot be empty\nTry again");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    count++;
+                    goto start;
+                }
+                if (count == 2)
+                    DisplayPrompt();
+            }
+            catch (Exception error)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+                DisplayPrompt();
+            }
         }
+        public static void Withdrawal(Account account)
+        {
+            int count = 1;
+        start:
+            Console.WriteLine("How much will you like to withdraw?");
+            decimal amount = 0;
+            try
+            {
+                amount = Convert.ToDecimal(Console.ReadLine());
+                ITransactionService TransService = new TransactionService(new UnitOfWorkMAin(new BezaoPayContext()));
+                TransService.Withdraw(new WithdrawalViewModel { Amount = amount, AccountNumber = account.AccountNumber });
+
+            }
+            catch (FormatException)
+            {
+                if (amount + 0 == 0 && count != 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.WriteLine("Amount cannot be empty\nTry again");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    count++;
+                    goto start;
+                }
+                if (count == 2)
+                    DisplayPrompt();
+            }
+            catch (Exception error)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+                DisplayPrompt();
+            }
+
+        }
+
     }
 }

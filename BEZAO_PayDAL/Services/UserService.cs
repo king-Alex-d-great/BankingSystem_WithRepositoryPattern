@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using BEZAO_PayDAL.Encryption;
 using BEZAO_PayDAL.Entities;
 using BEZAO_PayDAL.Interfaces.Services;
 using BEZAO_PayDAL.Model;
@@ -17,6 +21,8 @@ namespace BEZAO_PayDAL.Services
 
         public void Register(RegisterViewModel model)
         {
+           
+            var salt = Hasher.getSalt();
             try
             {
                 if (!Validate(model))
@@ -31,10 +37,12 @@ namespace BEZAO_PayDAL.Services
                     Username = model.Username,
                     Birthday = model.Birthday,
                     IsActive = true,
-                    Password = model.ConfirmPassword,
-                    Account = new Account { AccountNumber = 1209374652 },
-                    Created = DateTime.Now
+                    Password = Hasher.hashPassword(Encoding.UTF8.GetBytes(model.ConfirmPassword), Encoding.UTF8.GetBytes(salt)),
+                    Account = new Account { AccountNumber = RandomNumberGenerator.GetInt32(999999999)},                    
+                    Created = DateTime.Now,
+                    Salt = salt
                 };
+
                 _unitOfWork.Users.Add(user);
                 _unitOfWork.Commit();
                 Console.WriteLine("Success!\n");
@@ -44,29 +52,33 @@ namespace BEZAO_PayDAL.Services
                 Console.WriteLine(error.Message);
                 Console.WriteLine(error.InnerException);
             }
-
         }
 
         public int Update(UpdateViewModel model, int Id)
         {
-            int affectedRow;
+            int affectedRow = 0;
             try
             {
                 var user = _unitOfWork.Users.Get(Id);
-                
+                var salt = user.Salt;
                 user.Email = model.Email ??= user.Email;
                 user.Username = model.Username ??= user.Username;
-
-                if (model.CurrentPassword == user.Password && !string.IsNullOrWhiteSpace(model.CurrentPassword))
+                var currenthashedpassword = Hasher.hashPassword(Encoding.UTF8.GetBytes(model.CurrentPassword), Encoding.UTF8.GetBytes(salt));
+                Console.WriteLine(currenthashedpassword);
+                Console.WriteLine(user.Password);
+                Console.WriteLine(salt);
+                if (currenthashedpassword == user.Password && !string.IsNullOrWhiteSpace(model.CurrentPassword))
                 {
+
                     if (model.NewPassword == model.ConfirmNewPassword && !string.IsNullOrWhiteSpace(model.NewPassword))
                     {
-                        user.Password = model.NewPassword;
+                        user.Password = Hasher.hashPassword(Encoding.UTF8.GetBytes(model.ConfirmNewPassword), Encoding.UTF8.GetBytes(salt));
+                        affectedRow = _unitOfWork.Commit();
+                        Console.WriteLine("User Updated successfully\n\n");
+                        return affectedRow;
                     }
                     Console.WriteLine("Confirm password field did not match newpassword field ");
                 }
-                affectedRow = _unitOfWork.Commit();
-                Console.WriteLine("User Updated successfully\n\n");
                 return affectedRow;
             }
             catch (Exception error)
@@ -76,24 +88,25 @@ namespace BEZAO_PayDAL.Services
             return 0;
         }
 
-        public void Login(LoginViewModel model)
+        public User Login(LoginViewModel model, out Account account)
         {
+            bool isValidated = false;
             Console.ForegroundColor = ConsoleColor.White;
-            if (!string.IsNullOrWhiteSpace(model.UsernameEmail))
-            {
-                if (!string.IsNullOrWhiteSpace(model.Password))
-                {
-                    model.UsernameEmail = model.UsernameEmail.Trim().ToLower();
-                    model.Password = model.Password.Trim().ToLower();
-                    var isValidated = validateLoginDetails(model.UsernameEmail, model.Password, out User user);
 
-                    if (isValidated)
-                    {
-                        Console.WriteLine(" login Successful\n\n");
-                        Console.WriteLine($"Welcome {user.Name}");
-                    }
-                }
+            model.UsernameEmail = model.UsernameEmail.Trim().ToLower();
+            model.Password = model.Password.Trim().ToLower();
+            isValidated = AuthenticateUser(model.UsernameEmail, model.Password, out User user);
+           // account = _unitOfWork.Accounts.Find(a => a.Id == user.AccountId).FirstOrDefault();
+            if (!isValidated)
+            {
+                account = null;
+                Console.WriteLine("Invalid Username or password\n");
+                return null; 
             }
+            account = _unitOfWork.Accounts.Find(a => a.Id == user.AccountId).FirstOrDefault();
+            Console.WriteLine(" login Successful\n\n");
+            Console.WriteLine(account.Balance);
+            return user;            
         }
 
         public User Delete(int id, out int affectedRow)
@@ -130,13 +143,11 @@ namespace BEZAO_PayDAL.Services
 
         private bool Validate(RegisterViewModel model)
         {
-            var error = string.IsNullOrWhiteSpace(model.Email) ? ErrorMenu("Email") :
-            string.IsNullOrWhiteSpace(model.FirstName) ? ErrorMenu("FirstName") :
-            string.IsNullOrWhiteSpace(model.LastName) ? ErrorMenu("LastName") :
+            var error = string.IsNullOrWhiteSpace(model.Email) ? ErrorMessage("Email", out int count) :
+            string.IsNullOrWhiteSpace(model.FirstName) ? ErrorMessage("FirstName", out count) :
+            string.IsNullOrWhiteSpace(model.LastName) ? ErrorMessage("LastName", out count) :
             model.Birthday == new DateTime() ? "Invalid date" :
-            string.IsNullOrWhiteSpace(model.Password) ? ErrorMenu("Password") :
-            model.Password != model.ConfirmPassword ? "Your passwords dont match!" :
-            string.Empty;
+            string.IsNullOrWhiteSpace(model.Password) ? ErrorMessage("Password", out count) : string.Empty;
 
             if (string.IsNullOrWhiteSpace(error))
             {
@@ -144,42 +155,55 @@ namespace BEZAO_PayDAL.Services
             }
             return false;
         }
-        string ErrorMenu(string name)
+        public static string ErrorMessage(string name, out int count)
         {
-            while (true)
+            count = 0;
+            while (true && count < 2)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nError Alert");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($" Your {name} cannot be empty\n");
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"You have {2 - count} more chances\n");
                 Console.WriteLine($"Please Input your {name}\n");
                 var Input = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(Input))
                 {
                     break;
                 }
+                count++;
+            }
+            if (count >= 2)
+            {
+                Console.WriteLine("You've Exhausted your chances. ");
+                return string.Empty;
             }
             return "yoo";
         }
 
-        public bool validateLoginDetails(string userNameEmail, string password, out User user)
+        public bool AuthenticateUser(string userNameEmail, string password, out User user)
         {
             user = null;
             var isValidated = false;
 
-            var queryableuser = _unitOfWork.Users.Find(a => a.Password == password && (a.Username == userNameEmail || a.Email == userNameEmail));
-            foreach (var item in queryableuser)
+            user = _unitOfWork.Users.Find(a => a.Username == userNameEmail || a.Email == userNameEmail).FirstOrDefault();
+
+            if (user == null)
+                return false;
+
+            var salt = user.Salt;
+            var saltedLoginPassword = Hasher.hashPassword(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(salt));
+
+            if (saltedLoginPassword == user.Password)
             {
-                if (item != null)
-                {
-                    user = item;
-                    isValidated = true;
-                    return isValidated;
-                }
+                isValidated = true;
+                return isValidated;
             }
-            Console.WriteLine("Your username or password is Incorrect\nor you aren't registered to this service\n");
-            return false;
+            Console.WriteLine("Your username or password is Incorrect\nIf you are a new user , please click 1 to register\n");
+            return isValidated;
         }
+
     }
 }
+

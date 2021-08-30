@@ -7,7 +7,7 @@ namespace BEZAO_PayDAL.Interfaces.Services
     {
         void Register(RegisterViewModel model);
         int Update(UpdateViewModel model, int Id);
-        void Login(LoginViewModel model);
+        User Login(LoginViewModel model, out Account account);
         User Delete(int id, out int affectedRow);
         void Get(int id);
     }

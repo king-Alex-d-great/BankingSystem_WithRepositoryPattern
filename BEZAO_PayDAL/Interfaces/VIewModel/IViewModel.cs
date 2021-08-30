@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeFirstSoln
+namespace BEZAO_PayDAL.Interfaces
 {
-    partial class Program
+    interface IViewModel
     {
     }
 }

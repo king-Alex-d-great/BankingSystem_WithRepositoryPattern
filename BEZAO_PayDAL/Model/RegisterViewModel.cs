@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BEZAO_PayDAL.Interfaces;
 
 namespace BEZAO_PayDAL.Model
 {
-   public class RegisterViewModel
+   public class RegisterViewModel : IViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
